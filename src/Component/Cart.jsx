@@ -1,15 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FaRegSadTear } from "react-icons/fa";
 
-const Cart = ({ cartItems, removeFromCart, updateQuantity }) => {
+const Cart = () => {
+  const [cartItems, setCartItems] = useState(() => {
+    // Load cart items from session storage on component mount
+    const savedCart = sessionStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  // Sync session storage and update UI instantly
+  const syncCartWithSessionStorage = (updatedCartItems) => {
+    setCartItems(updatedCartItems); // Immediately update state
+    sessionStorage.setItem("cartItems", JSON.stringify(updatedCartItems)); // Immediately sync with sessionStorage
+  };
+
+  // Calculate total cost and total items
+  const totalCost = cartItems.reduce(
+    (total, item) => total + item.price * (item.quantity || 1),
+    0
+  );
+  const totalItems = cartItems.reduce(
+    (total, item) => total + (item.quantity || 1),
+    0
+  );
+
+  // Handle updating the quantity of an item
+  const handleUpdateQuantity = (id, newQuantity) => {
+    if (newQuantity < 1) return; // Prevent quantity from going below 1
+
+    const updatedCart = cartItems.map((item) =>
+      item.id === id ? { ...item, quantity: newQuantity } : item
+    );
+
+    syncCartWithSessionStorage(updatedCart); // Sync immediately after update
+  };
+
+  // Handle removing an item from the cart
+  const handleRemoveFromCart = (id) => {
+    const updatedCart = cartItems.filter((item) => item.id !== id);
+    syncCartWithSessionStorage(updatedCart); // Sync immediately after update
+  };
+
+  // Show empty cart message if no items exist
   if (cartItems.length === 0) {
     return (
-      <div>
-        <p className="text-center text-gray-500">Your cart is empty.</p>
-        <p>
+      <div className="bg-black pt-[100px] sm:pt-[150px] min-h-screen flex justify-center flex-col items-center">
+        <p className="text-center text-lime-500 text-xl flex items-center gap-2">
+          Your cart is empty. <FaRegSadTear className="text-4xl" />
+        </p>
+        <p className="text-lime-500 mt-4">
           Click here to
-          <Link to="/products" className="text-blue-500 underline">
-            add products
+          <Link to="/products">
+            <button className="animated-button mt-4">Go To Products</button>
           </Link>
         </p>
       </div>
@@ -17,38 +60,54 @@ const Cart = ({ cartItems, removeFromCart, updateQuantity }) => {
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+    <div className="bg-black pt-[128px] text-lime-100 min-h-screen">
+      <h2 className="text-4xl font-bold mb-4 font-serif">My Cart</h2>
+      <div className="text-2xl font-bold mt-6">
+        Total Items: <span className="text-lime-400">{totalItems}</span>
+      </div>
+      <div className="text-2xl font-bold mt-2">
+        Total Cost:{" "}
+        <span className="text-lime-400">${totalCost.toFixed(2)}</span>
+      </div>
       {cartItems.map((item) => (
-        <div key={item.id} className="border-b p-4 flex items-center">
-          <a href="#">
-            <img
-              className="p-4 rounded-lg h-40 w-40 object-cover"
-              src={item.image}
-              alt={item.name}
-            />
-          </a>
-          <div className="ml-4 flex-grow">
-            <h3 className="text-xl font-bold">{item.name}</h3>
+        <div
+          key={item.id}
+          className="border-b p-2 sm:p-4 flex items-center justify-center"
+        >
+          <div className="">
+            <a href="#">
+              <img
+                className="p-4 rounded-lg h-40 min-w-32 max-w-32 sm:w-40 object-cover right-0"
+                src={item.image}
+                alt={item.name}
+              />
+            </a>
+          </div>
+          <div className="ml-4 flex-grow text-start">
+            <h3 className="text-sm sm:text-xl font-bold">{item.name}</h3>
             <p>Price: ${item.price}</p>
-            <p>Quantity: {item.quantity}</p>
+            <p>Quantity: {item.quantity || 1}</p>
             <div className="mt-2">
               <button
-                onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                className="bg-green-500 text-white px-2 py-1 mr-2"
+                onClick={() =>
+                  handleUpdateQuantity(item.id, (item.quantity || 1) + 1)
+                }
+                className="bg-green-500 text-white px-2 sm:px-3 py-1 mr-2 rounded-lg font-bold text-2xl"
               >
                 +
               </button>
               <button
-                onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                className="bg-red-500 text-white px-2 py-1 mr-2"
-                disabled={item.quantity === 1}
+                onClick={() =>
+                  handleUpdateQuantity(item.id, (item.quantity || 1) - 1)
+                }
+                className="bg-red-500 text-white px-2 sm:px-3 py-1 mr-2 rounded-lg font-bold text-2xl"
+                disabled={(item.quantity || 1) === 1}
               >
                 -
               </button>
               <button
-                onClick={() => removeFromCart(item.id)}
-                className="bg-gray-500 text-white px-2 py-1"
+                onClick={() => handleRemoveFromCart(item.id)}
+                className="bg-gray-500 text-white px-2 sm:px-3 py-1 mr-2 rounded-lg text-xl"
               >
                 Remove
               </button>
