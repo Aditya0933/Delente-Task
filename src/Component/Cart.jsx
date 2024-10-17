@@ -27,19 +27,19 @@ const Cart = () => {
 
   // Handle updating the quantity of an item
   const handleUpdateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return; // Prevent quantity from going below 1
+    if (newQuantity < 1) return;
 
     const updatedCart = cartItems.map((item) =>
       item.id === id ? { ...item, quantity: newQuantity } : item
     );
 
-    syncCartWithSessionStorage(updatedCart); // Sync immediately after update
+    syncCartWithSessionStorage(updatedCart);
   };
 
   // Handle removing an item from the cart
   const handleRemoveFromCart = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);
-    syncCartWithSessionStorage(updatedCart); // Sync immediately after update
+    syncCartWithSessionStorage(updatedCart);
   };
 
   // Show empty cart message if no items exist

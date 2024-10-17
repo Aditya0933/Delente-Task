@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import BgVideo from "../IMG/bg_video.mp4"; // Ensure this path is correct
+import BgVideo from "../IMG/bg_video.mp4";
 
 const Home = () => {
   return (
