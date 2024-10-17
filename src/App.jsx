@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Home from './Component/Home';
-import ProductList from './Component/ProductList';
-import Cart from './Component/Cart';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Home from "./Component/Home";
+import ProductList from "./Component/ProductList";
+import Cart from "./Component/Cart";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for styling
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
 
   // Load cart from localStorage on component mount
   useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const savedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
     setCartItems(savedCart);
   }, []);
 
   // Save cart to localStorage whenever cartItems changes
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
   // Add item to cart or update its quantity if already in the cart
@@ -34,12 +36,14 @@ function App() {
     });
 
     // Trigger a notification when an item is added to the cart
-    alert(`${product.name} added to cart`);
+    toast(`${product.name} added to cart`);
   };
 
   // Remove item from cart
   const removeFromCart = (productId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.id !== productId)
+    );
   };
 
   // Update the quantity of an item in the cart
@@ -60,8 +64,12 @@ function App() {
             Shop
           </Link>
           <div>
-            <Link to="/" className="ml-4">Home</Link>
-            <Link to="/products" className="ml-4">Products</Link>
+            <Link to="/" className="ml-4">
+              Home
+            </Link>
+            <Link to="/products" className="ml-4">
+              Products
+            </Link>
             <Link to="/cart" className="ml-4">
               Cart ({cartItems.length})
             </Link>
@@ -72,22 +80,13 @@ function App() {
       <main className="p-4">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/products"
-            element={<ProductList addToCart={addToCart} />}
-          />
-          <Route
-            path="/cart"
-            element={
-              <Cart
-                cartItems={cartItems}
-                removeFromCart={removeFromCart}
-                updateQuantity={updateQuantity}
-              />
-            }
-          />
+          <Route path="/products" element={<ProductList addToCart={addToCart} />} />
+          <Route path="/cart" element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} updateQuantity={updateQuantity} />} />
         </Routes>
       </main>
+
+      {/* Toast Container */}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick pauseOnFocusLoss draggable pauseOnHover />
     </Router>
   );
 }
