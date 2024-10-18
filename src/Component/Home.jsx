@@ -24,7 +24,7 @@ const Home = () => {
           </h1>
           {/* Subheading */}
           <p className="mt-4 text-lg sm:text-4xl font-bold text-white">
-            to Aditya's Online Shop Store
+            to Aditya's Online Store
           </p>
           {/* Call to Action Button */}
           <p className="mt-4">
