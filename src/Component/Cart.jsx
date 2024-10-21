@@ -61,12 +61,15 @@ const Cart = () => {
 
   return (
     <div className="bg-black pt-[128px] text-lime-100 min-h-screen">
-      <h2 className="text-4xl font-bold mb-4 font-serif">My Cart</h2>
-      <div className="text-2xl font-bold mt-6">
-        Total Items: <span className="text-lime-400">{totalItems}</span>
+      <h2 className="text-3xl sm:text-5xl text-lime-400 font-bold mb-8 font-cursive pt-16">
+        My Cart
+      </h2>
+
+      <div className="text-2xl sm:text-3xl font-bold mt-6 font-cursive">
+        Total Items : <span className="text-lime-400">{totalItems}</span>
       </div>
-      <div className="text-2xl font-bold mt-2">
-        Total Cost:{" "}
+      <div className="text-2xl sm:text-3xl font-bold mt-2 font-cursive mb-16">
+        Total Cost :{" "}
         <span className="text-lime-400">${totalCost.toFixed(2)}</span>
       </div>
       {cartItems.map((item) => (

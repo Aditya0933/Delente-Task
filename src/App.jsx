@@ -3,11 +3,19 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./Component/Home";
 import ProductList from "./Component/ProductList";
 import Cart from "./Component/Cart";
-import { FaBars, FaTimes, FaHeart } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaHeart,
+  FaShoppingCart,
+  FaHome,
+  FaBoxOpen,
+} from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Logo from "./IMG/BrandLogo.png";
+import ImageSlider from "./Component/ImageSlider";
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
@@ -40,7 +48,9 @@ function App() {
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
-        toast(`${product.name} quantity increased to ${existingItem.quantity + 1}`);
+        toast(
+          `${product.name} quantity increased to ${existingItem.quantity + 1}`
+        );
       } else {
         // If the item does not exist, add it to the cart
         const newItem = { ...product, quantity: 1 };
@@ -72,7 +82,10 @@ function App() {
   };
 
   // Calculate total items in the cart
-  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const totalItems = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   return (
     <Router>
@@ -80,26 +93,46 @@ function App() {
       <header className="absolute z-40 w-full text-white py-4 px-4 sm:px-10 bg-transparent">
         <nav className="flex justify-between items-center">
           <Link to="/" className="flex items-center text-2xl font-bold">
-            <img src={Logo} alt="Shop Logo" className="h-16 sm:h-28 sm:w-32 mr-2" />
+            <img
+              src={Logo}
+              alt="Shop Logo"
+              className="h-16 sm:h-28 sm:w-32 mr-2"
+            />
           </Link>
 
           {/* Hamburger Icon for Mobile */}
           <div className="md:hidden z-50">
-            <button className="text-3xl focus:outline-none" onClick={toggleMobileMenu}>
-              {isMobileMenuOpen ? <FaTimes className="text-lime-400 z-500" /> : <FaBars className="text-lime-400" />}
+            <button
+              className="text-3xl focus:outline-none"
+              onClick={toggleMobileMenu}
+            >
+              {isMobileMenuOpen ? (
+                <FaTimes className="text-lime-400 z-500" />
+              ) : (
+                <FaBars className="text-lime-400" />
+              )}
             </button>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex">
-            <Link to="/" className="ml-8 font-semibold text-2xl font-cursive hover:text-lime-400 transition">
-              Home
+          <div className="hidden md:flex items-center">
+            <Link
+              to="/"
+              className="ml-8 font-semibold text-2xl font-cursive flex items-center hover:text-lime-400 transition"
+            >
+              <FaHome className="mr-2" /> Home
             </Link>
-            <Link to="/products" className="ml-8 font-semibold text-2xl font-cursive hover:text-lime-400 transition">
-              Products
+            <Link
+              to="/products"
+              className="ml-8 font-semibold text-2xl font-cursive flex items-center hover:text-lime-400 transition"
+            >
+              <FaBoxOpen className="mr-2" /> Products
             </Link>
-            <Link to="/cart" className="ml-8 font-semibold text-2xl font-cursive hover:text-lime-400 transition">
-              Cart ({totalItems})
+            <Link
+              to="/cart"
+              className="ml-8 font-semibold text-2xl font-cursive flex items-center hover:text-lime-400 transition"
+            >
+              <FaShoppingCart className="mr-2" /> Cart ({totalItems})
             </Link>
           </div>
 
@@ -112,24 +145,24 @@ function App() {
             <div className="flex flex-col items-start p-8">
               <Link
                 to="/"
-                className="text-2xl font-cursive py-2 hover:text-lime-400 transition"
+                className="text-2xl font-cursive py-2 flex items-center hover:text-lime-400 transition"
                 onClick={toggleMobileMenu}
               >
-                Home
+                <FaHome className="mr-2" /> Home
               </Link>
               <Link
                 to="/products"
-                className="text-2xl font-cursive py-2 hover:text-lime-400 transition"
+                className="text-2xl font-cursive py-2 flex items-center hover:text-lime-400 transition"
                 onClick={toggleMobileMenu}
               >
-                Products
+                <FaBoxOpen className="mr-2" /> Products
               </Link>
               <Link
                 to="/cart"
-                className="text-2xl font-cursive py-2 hover:text-lime-400 transition"
+                className="text-2xl font-cursive py-2 flex items-center hover:text-lime-400 transition"
                 onClick={toggleMobileMenu}
               >
-                Cart ({totalItems})
+                <FaShoppingCart className="mr-2" /> Cart ({totalItems})
               </Link>
             </div>
           </div>
@@ -140,7 +173,15 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/products" element={<ProductList addToCart={addToCart} />} />
+          <Route
+            path="/products"
+            element={
+              <div className="">
+                <ImageSlider />
+                <ProductList addToCart={addToCart} />
+              </div>
+            }
+          />
           <Route
             path="/cart"
             element={
