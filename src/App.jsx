@@ -14,7 +14,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Logo from "./IMG/BrandLogo.png";
-import ImageSlider from "./Component/ImageSlider";
 import { FaRegUserCircle } from "react-icons/fa";
 import CategoryProductContainer from "./Component/CategoryProductContainer";
 import ProductDetail from "./Component/ProductDetail";
