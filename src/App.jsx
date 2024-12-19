@@ -6,7 +6,6 @@ import Cart from "./Component/Cart";
 import {
   FaBars,
   FaTimes,
-  FaHeart,
   FaShoppingCart,
   FaHome,
   FaBoxOpen,
@@ -16,13 +15,11 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Logo from "./IMG/BrandLogo.png";
 import ImageSlider from "./Component/ImageSlider";
+import { FaRegUserCircle } from "react-icons/fa";
+import CategoryProductContainer from "./Component/CategoryProductContainer";
+import ProductDetail from "./Component/ProductDetail";
 
 function App() {
-  const [cartItems, setCartItems] = useState(() => {
-    // Load cart items from session storage on component mount
-    return JSON.parse(sessionStorage.getItem("cartItems")) || [];
-  });
-
   // For mobile menu toggle
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -30,62 +27,6 @@ function App() {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
-
-  // Update session storage whenever cartItems changes
-  useEffect(() => {
-    sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  // Add an item to the cart
-  const addToCart = (product) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === product.id);
-      let updatedItems;
-      if (existingItem) {
-        // If the item already exists, increase the quantity
-        updatedItems = prevItems.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-        toast(
-          `${product.name} quantity increased to ${existingItem.quantity + 1}`
-        );
-      } else {
-        // If the item does not exist, add it to the cart
-        const newItem = { ...product, quantity: 1 };
-        updatedItems = [...prevItems, newItem];
-        toast(`${newItem.name} added to cart`);
-      }
-      return updatedItems;
-    });
-  };
-
-  // Remove an item from the cart
-  const removeFromCart = (productId) => {
-    setCartItems((prevItems) => {
-      const updatedItems = prevItems.filter((item) => item.id !== productId);
-      toast("Item removed from cart");
-      return updatedItems;
-    });
-  };
-
-  // Update the quantity of a cart item
-  const updateQuantity = (productId, quantity) => {
-    if (quantity < 1) return; // Prevent quantity from being less than 1
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
-      )
-    );
-    toast(`Quantity updated to ${quantity}`);
-  };
-
-  // Calculate total items in the cart
-  const totalItems = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
 
   return (
     <Router>
@@ -123,16 +64,16 @@ function App() {
               <FaHome className="mr-2" /> Home
             </Link>
             <Link
-              to="/products"
-              className="ml-8 font-semibold text-2xl font-cursive flex items-center hover:text-lime-400 transition"
-            >
-              <FaBoxOpen className="mr-2" /> Products
-            </Link>
-            <Link
               to="/cart"
               className="ml-8 font-semibold text-2xl font-cursive flex items-center hover:text-lime-400 transition"
             >
-              <FaShoppingCart className="mr-2" /> Cart ({totalItems})
+              <FaShoppingCart className="mr-2" /> Cart
+            </Link>
+            <Link
+              to="/myprofilepage"
+              className="ml-8 font-semibold text-2xl font-cursive flex items-center hover:text-lime-400 transition"
+            >
+              <FaRegUserCircle className="mr-2" />
             </Link>
           </div>
 
@@ -162,7 +103,7 @@ function App() {
                 className="text-2xl font-cursive py-2 flex items-center hover:text-lime-400 transition"
                 onClick={toggleMobileMenu}
               >
-                <FaShoppingCart className="mr-2" /> Cart ({totalItems})
+                <FaShoppingCart className="mr-2" /> Cart
               </Link>
             </div>
           </div>
@@ -177,40 +118,23 @@ function App() {
             path="/products"
             element={
               <div className="">
-                <ImageSlider />
-                <ProductList addToCart={addToCart} />
+                <ProductList />
               </div>
             }
           />
+          <Route path="/cart" element={<Cart />} />
           <Route
-            path="/cart"
-            element={
-              <Cart
-                cartItems={cartItems}
-                removeFromCart={removeFromCart}
-                updateQuantity={updateQuantity}
-              />
-            }
-          />
+            path="/products/category/:category"
+            element={<CategoryProductContainer />}
+          ></Route>
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
       </main>
-
-      {/* Toast Notifications */}
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
 
       {/* Footer */}
       <footer className="bg-black text-lime-400 text-center w-full pt-6 pb-2">
         <p className="flex items-center justify-center gap-2 font-cursive">
-          Made by Aditya Singh Parihar with <FaHeart className="text-red-400" />
+          Delente Technology Task
         </p>
       </footer>
     </Router>
