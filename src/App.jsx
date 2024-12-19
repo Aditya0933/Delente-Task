@@ -30,7 +30,7 @@ function App() {
   return (
     <Router>
       {/* Header */}
-      <header className="absolute z-40 w-full text-white py-4 px-4 sm:px-10 bg-transparent">
+      <header className="absolute z-40 w-full text-white py-4 px-4 sm:px-10 bg-black">
         <nav className="flex justify-between items-center">
           <Link to="/" className="flex items-center text-2xl font-bold">
             <img

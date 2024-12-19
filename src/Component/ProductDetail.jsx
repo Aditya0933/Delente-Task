@@ -46,7 +46,7 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="slider-container h-100vh p-[100px] sm:p-[150px] bg-black">
+    <div className="slider-container h-100vh p-[100px] sm:p-[250px] pb-[200px] bg-black">
       <div className="flex flex-col lg:flex-row">
         <div className="flex-none w-full lg:w-2/5">
           <img
@@ -65,7 +65,7 @@ const ProductDetail = () => {
             <span className="text-3xl font-semibold text-lime-400">
               ${product.price}
             </span>
-            <button className="px-6 py-2 bg-lime-400 text-black rounded-full font-semibold hover:bg-lime-500 transition duration-300">
+            <button className="px-6 py-2 bg-lime-400 text-black  rounded-full font-semibold hover:bg-lime-500 transition duration-300">
               Add to Cart
             </button>
           </div>

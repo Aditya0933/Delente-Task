@@ -5,10 +5,7 @@ import "./index.css";
 import { CartProvider } from "./ContextAPI/CartContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
   <CartProvider>
     <App />
   </CartProvider>
-
-  // </StrictMode>,
 );
