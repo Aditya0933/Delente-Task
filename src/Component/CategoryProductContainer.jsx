@@ -56,7 +56,7 @@ const CategoryProductContainer = () => {
   return (
     <div className="p-6 bg-black pt-[30px] sm:pt-[40px] min-h-screen">
       <div className="text-center mb-4 py-8 sm:py-20">
-        <div className="p-4 bg-black text-lime-400 rounded-md">
+        <div className="p-4 bg-black text-lime-400 rounded-md pt-[30px]">
           <h2 className="text-2xl font-bold">Category: {category || "No category selected"}</h2>
         </div>
       </div>
