@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const ProductList = () => {
   const [dummyProducts, setDummyProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch products on component mount
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -39,31 +39,45 @@ const ProductList = () => {
         </p>
       </div>
 
-      {/* Loading Spinner */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin text-lime-400 text-4xl"></div>
+          <div className="animate-spin text-lime-400 text-4xl">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-12 w-12"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6v12h16V6H4z"
+              />
+            </svg>
+          </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {dummyProducts.map((product) => (
             <div
               key={product.id}
               className="w-full max-w-sm bg-lime-50 border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             >
-              <a href="#">
+              <Link to={`/product/${product.id}`} className="block">
                 <img
-                  className="p-4 rounded-t-lg h-60 w-80 mx-auto"
+                  className="p-4 rounded-t-lg h-60 w-80 mx-auto object-cover"
                   src={product.image}
                   alt={product.name}
                 />
-              </a>
+              </Link>
               <div className="px-4 pb-4">
-                <a href="#">
+                <Link to={`/product/${product.id}`} className="block">
                   <h5 className="text-lg font-semibold tracking-tight text-gray-800">
                     {product.name}
                   </h5>
-                </a>
+                </Link>
                 <span className="text-2xl font-bold text-gray-900">
                   ${product.price}
                 </span>

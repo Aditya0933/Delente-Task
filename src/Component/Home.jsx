@@ -10,7 +10,6 @@ const Home = () => {
   const { updateCategory } = useContext(CartContext);
   const navigate = useNavigate();
 
-  // Fetch categories from the API
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -29,15 +28,13 @@ const Home = () => {
     fetchCategories();
   }, []);
 
-  // Handle category click
   const handleCategoryClick = (category) => {
-    updateCategory(category); // Update the category in the context
-    navigate(`/products/category/${category}`); // Dynamically update the URL
+    updateCategory(category);
+    navigate(`/products/category/${category}`);
   };
 
   return (
     <div className="relative text-center h-screen overflow-hidden">
-      {/* Background Video */}
       <video
         src={BgVideo}
         className="absolute top-0 left-0 w-full h-full object-cover"
@@ -47,18 +44,15 @@ const Home = () => {
         playsInline
         aria-label="Background video showing shop theme"
       />
-      
+
       <div className="relative z-10 h-full flex flex-col justify-center items-center bg-black bg-opacity-70">
         <div className="flex flex-col justify-center items-start border-l-4 border-lime-400 transition rounded-2xl ml-6 sm:ml-0 p-4 pl-4 sm:pl-12">
-          {/* Main Heading */}
           <h1 className="text-6xl sm:text-8xl font-bold text-white font-cursive">
             Welcome
           </h1>
-          {/* Subheading */}
           <p className="mt-4 text-lg sm:text-4xl font-bold text-white">
             to Store
           </p>
-          {/* Call to Action Button */}
           <p className="mt-4">
             <Link to="/products">
               <button className="animated-button">
@@ -98,7 +92,7 @@ const Home = () => {
                 <span
                   key={category}
                   className="text-lime-400 bg-black border border-lime-400 rounded-full px-4 py-2 text-sm hover:bg-lime-400 hover:text-black transition duration-200 cursor-pointer"
-                  onClick={() => handleCategoryClick(category)} // Handle click event
+                  onClick={() => handleCategoryClick(category)}
                 >
                   {category.charAt(0).toUpperCase() + category.slice(1)}
                 </span>

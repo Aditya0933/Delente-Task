@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "swiper/css"; // Import Swiper styles
-import "swiper/css/navigation"; // Import Navigation styles
-import "swiper/css/pagination"; // Import Pagination styles
+import "swiper/css"; 
+import "swiper/css/navigation"; 
+import "swiper/css/pagination"; 
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const ProductDetail = () => {
-  const { id } = useParams(); // Get the product ID from the URL
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +29,7 @@ const ProductDetail = () => {
     };
 
     fetchProductDetails();
-  }, [id]); // Re-fetch when product ID changes
+  }, [id]); 
 
   if (loading) {
     return (
@@ -48,7 +48,6 @@ const ProductDetail = () => {
   return (
     <div className="slider-container h-100vh p-[100px] sm:p-[150px] bg-black">
       <div className="flex flex-col lg:flex-row">
-        {/* Product Image */}
         <div className="flex-none w-full lg:w-2/5">
           <img
             className="rounded-lg w-full h-80 object-cover"
@@ -57,12 +56,10 @@ const ProductDetail = () => {
           />
         </div>
 
-        {/* Product Details */}
         <div className="lg:ml-8 mt-6 lg:mt-0 flex flex-col justify-between w-full">
           <h2 className="text-4xl text-left font-bold text-lime-400 mb-2">
             {product.title}
           </h2>
-          {/* <p className="text-lg text-gray-300">{product.category}</p> */}
 
           <div className="mt-4 flex items-center space-x-6">
             <span className="text-3xl font-semibold text-lime-400">
@@ -75,7 +72,6 @@ const ProductDetail = () => {
 
           <p className="mt-6 text-lg text-gray-300 text-left">{product.description}</p>
 
-          {/* Additional Info */}
           <div className="mt-8 text-sm text-gray-400 text-left">
             <p>
               <strong>Brand:</strong> {product.brand || "N/A"}

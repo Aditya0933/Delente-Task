@@ -3,16 +3,15 @@ import { useParams, Link } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const CategoryProductContainer = () => {
-  const { category } = useParams(); // Grabbing the category from the URL
+  const { category } = useParams(); 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const isFirstRender = useRef(true); // To trigger the API call only once on initial render
+  const isFirstRender = useRef(true);
 
-  // Fetch products based on the selected category
   useEffect(() => {
     if (isFirstRender.current) {
-      isFirstRender.current = false; // Set to false after the first render
-      return; // Skip the first render
+      isFirstRender.current = false; 
+      return;
     }
 
     const fetchProducts = async () => {
@@ -23,7 +22,7 @@ const CategoryProductContainer = () => {
         return;
       }
 
-      console.log("Fetching products for category:", category); // Log category before API request
+      console.log("Fetching products for category:", category);
       setLoading(true);
       try {
         const response = await fetch(
@@ -34,7 +33,7 @@ const CategoryProductContainer = () => {
         }
 
         const data = await response.json();
-        console.log("Data received:", data); // Log the data to confirm API response
+        console.log("Data received:", data);
 
         const adaptedProducts = data.map((product) => ({
           id: product.id,
@@ -52,7 +51,7 @@ const CategoryProductContainer = () => {
     };
 
     fetchProducts();
-  }, [category]); // Depend on the category from the URL
+  }, [category]);
 
   return (
     <div className="p-6 bg-black pt-[30px] sm:pt-[40px] min-h-screen">
@@ -62,7 +61,6 @@ const CategoryProductContainer = () => {
         </div>
       </div>
 
-      {/* Loading Spinner */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin text-lime-400 text-4xl"><AiOutlineLoading3Quarters /></div>

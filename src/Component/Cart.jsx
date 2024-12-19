@@ -3,46 +3,7 @@ import { Link } from "react-router-dom";
 import { FaRegSadTear } from "react-icons/fa";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState(() => {
-    // Load cart items from session storage on component mount
-    const savedCart = sessionStorage.getItem("cartItems");
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
 
-  // Sync session storage and update UI instantly
-  const syncCartWithSessionStorage = (updatedCartItems) => {
-    setCartItems(updatedCartItems); // Immediately update state
-    sessionStorage.setItem("cartItems", JSON.stringify(updatedCartItems)); // Immediately sync with sessionStorage
-  };
-
-  // Calculate total cost and total items
-  const totalCost = cartItems.reduce(
-    (total, item) => total + item.price * (item.quantity || 1),
-    0
-  );
-  const totalItems = cartItems.reduce(
-    (total, item) => total + (item.quantity || 1),
-    0
-  );
-
-  // Handle updating the quantity of an item
-  const handleUpdateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return;
-
-    const updatedCart = cartItems.map((item) =>
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    );
-
-    syncCartWithSessionStorage(updatedCart);
-  };
-
-  // Handle removing an item from the cart
-  const handleRemoveFromCart = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    syncCartWithSessionStorage(updatedCart);
-  };
-
-  // Show empty cart message if no items exist
   if (cartItems.length === 0) {
     return (
       <div className="bg-black pt-[100px] sm:pt-[150px] min-h-screen flex justify-center flex-col items-center">
