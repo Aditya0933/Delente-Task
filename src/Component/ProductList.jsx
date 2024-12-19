@@ -31,7 +31,7 @@ const ProductList = () => {
   return (
     <div className="p-6 bg-black pt-[30px] sm:pt-[40px] min-h-screen">
       <div className="text-center mb-4 py-8 sm:py-20">
-        <h1 className="text-lime-400 text-4xl sm:text-5xl font-bold font-cursive">
+        <h1 className="text-lime-400 text-4xl sm:text-5xl font-bold font-cursive pt-[20px]">
           Classic Since Forever
         </h1>
         <p className="text-lime-400 font-cursive text-lg sm:text-3xl">

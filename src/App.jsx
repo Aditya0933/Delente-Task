@@ -63,7 +63,7 @@ function App() {
               <FaHome className="mr-2" /> Home
             </Link>
             <Link
-              to="/cart"
+              to="/products"
               className="ml-8 font-semibold text-2xl font-cursive flex items-center hover:text-lime-400 transition"
             >
               <FaShoppingCart className="mr-2" /> Cart
