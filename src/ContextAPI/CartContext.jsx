@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import useFetch from "../Hooks/useFetch";
 
 const CartContext = createContext();
@@ -8,13 +8,23 @@ const CartProvider = ({ children }) => {
     "https://fakestoreapi.com/products/categories"
   );
 
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const updateCategory = (category) => {
     console.log("Category selected:", category);
+    setSelectedCategory(category);
   };
 
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(false);
   const [productsError, setProductsError] = useState(null);
+
+  // Fetch products when category changes
+  useEffect(() => {
+    if (selectedCategory) {
+      fetchProductsByCategory(selectedCategory);
+    }
+  }, [selectedCategory]);
 
   const fetchProductsByCategory = async (category) => {
     setProductsLoading(true);
@@ -85,6 +95,7 @@ const CartProvider = ({ children }) => {
         loading,
         error,
         updateCategory,
+        selectedCategory,
         products,
         fetchProductsByCategory,
         productsLoading,

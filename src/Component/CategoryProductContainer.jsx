@@ -2,26 +2,27 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import SkeletonLoader from "./SkeletonLoader";
 import { useCart } from "../ContextAPI/CartContext";
-import ProductCard from "./ProductCard";
+import ProductCard from "./ProductCard"; // Import the ProductCard component
 
 const CategoryProductContainer = () => {
-  const { category } = useParams();
+  const { category } = useParams(); // Get the category from the URL
   const {
     categories,
-    loading,
-    error,
+    categoriesLoading,
+    categoriesError,
     products,
-    fetchProductsByCategory,
     productsLoading,
     productsError,
+    updateCategory,
   } = useCart();
 
   useEffect(() => {
-    if (category && !products.length) {
-      fetchProductsByCategory(category);
+    if (category) {
+      updateCategory(category); // Fetch products based on the new category
     }
-  }, [category, fetchProductsByCategory, products.length]);
+  }, [category, updateCategory]);
 
+  // Error messages for categories and products
   const renderError = (error, type) => (
     <div className="text-center text-red-600 mb-6">
       <p className="text-lg font-semibold">
@@ -32,6 +33,7 @@ const CategoryProductContainer = () => {
 
   return (
     <div className="py-4 sm:py-6 md:py-8 px-6 sm:px-16 bg-black min-h-screen">
+      {/* Category Header */}
       <div className="text-center mb-8 sm:mb-20">
         <div className=" bg-black text-yellow-500 rounded-md shadow-lg">
           <h2 className="text-3xl sm:text-4xl font-bold font-cursive">
@@ -40,6 +42,7 @@ const CategoryProductContainer = () => {
         </div>
       </div>
 
+      {/* Introduction Section */}
       <div className="text-center text-gray-300 mb-10 sm:mb-16">
         <p className="text-lg sm:text-2xl font-light">
           Welcome to our{" "}
@@ -51,10 +54,13 @@ const CategoryProductContainer = () => {
         </p>
       </div>
 
-      {error && renderError(error, "Categories")}
+      {/* Categories Error */}
+      {categoriesError && renderError(categoriesError, "Categories")}
 
+      {/* Products Loading */}
       {productsLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {/* Display skeleton cards for products */}
           {[...Array(12)].map((_, index) => (
             <div key={index} className="w-full">
               <SkeletonLoader />
@@ -63,23 +69,26 @@ const CategoryProductContainer = () => {
         </div>
       ) : (
         <>
+          {/* Products Error */}
           {productsError && renderError(productsError, "Products")}
-          {products?.length ? (
+
+          {/* Display Products */}
+          {products?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} /> // Using ProductCard component
               ))}
             </div>
-          ) : null}
+          ) : (
+            <div className="text-center text-gray-300 text-lg">
+              No products found for the selected category. Try checking back
+              later or explore other categories.
+            </div>
+          )}
         </>
       )}
 
-      {products?.length === 0 && !productsLoading && !productsError && (
-        <div className="text-center text-gray-300 text-lg">
-          No products found for the selected category. Try checking back later or explore other categories.
-        </div>
-      )}
-
+      {/* Suggestion Section */}
       <div className="text-center mt-16 sm:mt-24">
         <h3 className="text-2xl sm:text-3xl font-bold text-yellow-500 mb-4">
           Looking for something else?

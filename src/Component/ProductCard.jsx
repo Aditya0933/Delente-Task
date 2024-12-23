@@ -15,15 +15,16 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className="w-full max-w-sm bg-white border overflow-hidden border-gray-300 rounded-lg shadow-lg mx-auto cursor-pointer"
+      className="w-full max-w-sm bg-white border border-gray-300 rounded-lg shadow-lg mx-auto cursor-pointer"
       onClick={handleProductClick}
     >
-      <div className="relative w-full h-auto ">
+      <div className="relative w-full h-auto">
         <div className="w-auto h-64 mx-auto rounded-t-lg overflow-hidden">
           <img
             className="w-full mx-auto h-full object-contain transition-transform duration-500 ease-in-out transform hover:scale-110"
             src={product.image}
             alt={product.name}
+            loading="lazy"
           />
         </div>
 
@@ -34,12 +35,8 @@ const ProductCard = ({ product }) => {
 
       <div className="px-6 py-4">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-lg font-semibold text-gray-800">
-            {product.name}
-          </span>
-          <span className="text-xl font-bold text-yellow-500">
-            ${product.price}
-          </span>
+          <span className="text-lg font-semibold text-gray-800">{product.name}</span>
+          <span className="text-xl font-bold text-yellow-500">${product.price}</span>
         </div>
         <p className="text-sm text-gray-600 mb-4">{truncatedDescription}</p>
         <button className="w-full py-2 bg-yellow-500 text-white font-semibold rounded-md hover:bg-yellow-600 transition duration-200">
