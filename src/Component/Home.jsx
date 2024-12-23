@@ -1,43 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BgVideo from "../IMG/bg_video.mp4";
-import { CartContext } from "../ContextAPI/CartContext";
+import { useCart } from "../ContextAPI/CartContext";
 
 const Home = () => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const { updateCategory } = useContext(CartContext);
+  const { categories, loading, error } = useCart();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(
-          "https://fakestoreapi.com/products/categories"
-        );
-        const data = await response.json();
-        setCategories(data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
   const handleCategoryClick = (category) => {
-    updateCategory(category);
     navigate(`/products/category/${category}`);
   };
 
   return (
-    <div className="relative text-center h-screen overflow-hidden">
+    <div className="relative text-center h-screen overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-black">
       <video
         src={BgVideo}
-        className="absolute top-0 left-0 w-full h-full object-cover"
+        className="absolute top-0 left-0 w-full h-full object-cover opacity-40"
         autoPlay
         loop
         muted
@@ -45,57 +23,59 @@ const Home = () => {
         aria-label="Background video showing shop theme"
       />
 
-      <div className="relative z-10 h-full flex flex-col justify-center items-center bg-black bg-opacity-70">
-        <div className="flex flex-col justify-center items-start border-l-4 border-lime-400 transition rounded-2xl ml-6 sm:ml-0 p-4 pl-4 sm:pl-12">
-          <h1 className="text-6xl sm:text-8xl font-bold text-white font-cursive">
-            Welcome
+      <div className="relative z-10 flex flex-col justify-center items-center h-full text-white bg-black bg-opacity-60 p-8 sm:p-12 md:p-16 lg:p-24">
+        <div className="text-center mb-8 px-8 py-12 rounded-lg shadow-xl bg-gradient-to-r from-yellow-700 via-yellow-500 to-yellow-700 max-w-2xl mx-auto">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold font-cursive tracking-wide">
+            Shop & Save
           </h1>
-          <p className="mt-4 text-lg sm:text-4xl font-bold text-white">
-            to Store
+          <p className="mt-4 text-lg sm:text-xl md:text-2xl font-semibold">
+            Where quality meets affordability, just for you.
           </p>
-          <p className="mt-4">
-            <Link to="/products">
-              <button className="animated-button">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="arr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-label="Right arrow"
-                >
-                  <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
-                </svg>
-                <span className="text">Go To Products</span>
-                <span className="circle"></span>
-                <svg
-                  viewBox="0 0 24 24"
-                  className="arr-1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-label="Right arrow"
-                >
-                  <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
-                </svg>
-              </button>
-            </Link>
-          </p>
+          <Link to="/products">
+            <button className="mt-6 inline-flex items-center px-8 py-4 font-semibold shadow-xl bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-700 text-yellow-100 border-2 border-yellow-500 rounded-full group hover:bg-gradient-to-r hover:from-yellow-500 group-hover:via-yellow-400 group-hover:to-yellow-300 transition-all duration-1000">
+              <span className="mr-2">Explore Products</span>
+              <svg
+                className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 19l7-7-7-7"></path>
+                <path d="M5 12h14"></path>
+              </svg>
+            </button>
+          </Link>
         </div>
-        <div className="p-4 rounded-md shadow-md">
-          <h2 className="text-lime-400 text-2xl font-bold">All Categories</h2>
-          <p className="text-gray-300 text-sm mt-1">
-            Explore a variety of products curated just for you.
+
+        <div className="w-full max-w-4xl">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-yellow-400">
+            Explore All Our Categories
+          </h2>
+          <p className="mt-2 text-lg text-gray-300">
+            Explore a diverse range of categories, each offering something new
+            for you.
           </p>
 
           {loading ? (
-            <div className="text-lime-400 mt-4">Loading categories...</div>
+            <div className="text-yellow-400 mt-6">Loading categories...</div>
+          ) : error ? (
+            <div className="text-red-400 mt-6">{error}</div>
           ) : (
-            <div className="flex flex-wrap gap-4 mt-4">
-              {categories.map((category) => (
-                <span
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {(categories || []).map((category) => (
+                <div
                   key={category}
-                  className="text-lime-400 bg-black border border-lime-400 rounded-full px-4 py-2 text-sm hover:bg-lime-400 hover:text-black transition duration-200 cursor-pointer"
+                  className="bg-black text-yellow-400 border border-yellow-500 rounded-lg px-2 sm:px-4 py-2 text-center cursor-pointer hover:bg-yellow-500 hover:text-black transition duration-300"
                   onClick={() => handleCategoryClick(category)}
                 >
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </span>
+                  <span className="font-semibold text-sm sm:text-md capitalize whitespace-nowrap">
+                    {category}
+                  </span>
+                </div>
               ))}
             </div>
           )}

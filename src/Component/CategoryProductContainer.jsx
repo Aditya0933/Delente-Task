@@ -1,100 +1,98 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import SkeletonLoader from "./SkeletonLoader";
+import { useCart } from "../ContextAPI/CartContext";
+import ProductCard from "./ProductCard";
 
 const CategoryProductContainer = () => {
-  const { category } = useParams(); 
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const isFirstRender = useRef(true);
+  const { category } = useParams();
+  const {
+    categories,
+    loading,
+    error,
+    products,
+    fetchProductsByCategory,
+    productsLoading,
+    productsError,
+  } = useCart();
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false; 
-      return;
+    if (category && !products.length) {
+      fetchProductsByCategory(category);
     }
+  }, [category, fetchProductsByCategory, products.length]);
 
-    const fetchProducts = async () => {
-      if (!category) {
-        console.log("No category specified.");
-        setProducts([]);
-        setLoading(false);
-        return;
-      }
-
-      console.log("Fetching products for category:", category);
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `https://fakestoreapi.com/products/category/${category}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-
-        const data = await response.json();
-        console.log("Data received:", data);
-
-        const adaptedProducts = data.map((product) => ({
-          id: product.id,
-          name: product.title,
-          price: product.price,
-          image: product.image,
-        }));
-
-        setProducts(adaptedProducts);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [category]);
+  const renderError = (error, type) => (
+    <div className="text-center text-red-600 mb-6">
+      <p className="text-lg font-semibold">
+        {type} Error: {error}
+      </p>
+    </div>
+  );
 
   return (
-    <div className="p-6 bg-black pt-[30px] sm:pt-[40px] min-h-screen">
-      <div className="text-center mb-4 py-8 sm:py-20">
-        <div className="p-4 bg-black text-lime-400 rounded-md pt-[30px]">
-          <h2 className="text-2xl font-bold">Category: {category || "No category selected"}</h2>
+    <div className="py-4 sm:py-6 md:py-8 px-6 sm:px-16 bg-black min-h-screen">
+      <div className="text-center mb-8 sm:mb-20">
+        <div className=" bg-black text-yellow-500 rounded-md shadow-lg">
+          <h2 className="text-3xl sm:text-4xl font-bold font-cursive">
+            Category: {category || "No category selected"}
+          </h2>
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin text-lime-400 text-4xl"><AiOutlineLoading3Quarters /></div>
-        </div>
-      ) : products.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="w-full max-w-sm bg-lime-50 border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-              <Link to={`/product/${product.id}`} className="block"> {/* Link to product detail page */}
-                <img
-                  className="p-4 rounded-t-lg h-60 w-80 mx-auto object-cover"
-                  src={product.image}
-                  alt={product.name}
-                />
-                <div className="px-4 pb-4">
-                  <h5 className="text-lg font-semibold tracking-tight text-gray-800">
-                    {product.name}
-                  </h5>
-                  <span className="text-2xl font-bold text-gray-900">
-                    ${product.price}
-                  </span>
-                </div>
-              </Link>
+      <div className="text-center text-gray-300 mb-10 sm:mb-16">
+        <p className="text-lg sm:text-2xl font-light">
+          Welcome to our{" "}
+          <span className="font-semibold text-yellow-500">{category}</span>{" "}
+          category! Explore a diverse range of premium products, handpicked just
+          for you. Whether you're looking for the latest trends or timeless
+          classics, we’ve got something for everyone. Browse through our
+          collection and find your perfect match.
+        </p>
+      </div>
+
+      {error && renderError(error, "Categories")}
+
+      {productsLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {[...Array(12)].map((_, index) => (
+            <div key={index} className="w-full">
+              <SkeletonLoader />
             </div>
           ))}
         </div>
       ) : (
+        <>
+          {productsError && renderError(productsError, "Products")}
+          {products?.length ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : null}
+        </>
+      )}
+
+      {products?.length === 0 && !productsLoading && !productsError && (
         <div className="text-center text-gray-300 text-lg">
-          No products found for the selected category.
+          No products found for the selected category. Try checking back later or explore other categories.
         </div>
       )}
+
+      <div className="text-center mt-16 sm:mt-24">
+        <h3 className="text-2xl sm:text-3xl font-bold text-yellow-500 mb-4">
+          Looking for something else?
+        </h3>
+        <p className="text-lg sm:text-xl text-gray-400 mb-8">
+          If you're not finding exactly what you're looking for, try exploring
+          some of our other categories for a broader selection of top-quality
+          products.
+        </p>
+        <button className="py-2 px-8 bg-yellow-500 text-white font-semibold rounded-md hover:bg-yellow-600 transition duration-200">
+          Explore More Categories
+        </button>
+      </div>
     </div>
   );
 };
